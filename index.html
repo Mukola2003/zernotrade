@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZERNO TRADE Energy &amp; Logistic — Зернотрейдинг, Агрологістика, СЕС та Обладнання</title>
+  <meta name="description" content="ZERNO TRADE Energy &amp; Logistic: закупівля зернових та олійних культур, власний автопарк MAN та DAF, продаж СЕС, УЗЕ, зарядних станцій та зернозберігаючого обладнання.">
+  <style>
+    :root {
+      --primary: #16A34A;
+      --primary-dark: #15803D;
+      --tech: #2563EB;
+      --tech-dark: #1D4ED8;
+      --accent: #EE5A5A;
+      --accent-hover: #DC2626;
+      --surface: #F8FAFC;
+      --dark: #0F172A;
+      --slate: #475569;
+      --border: #E2E8F0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #FFFFFF;
+      color: var(--dark);
+      line-height: 1.5;
+    }
+    a { text-decoration: none; color: inherit; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      background: var(--dark);
+      color: #CBD5E1;
+      font-size: 13px;
+      border-bottom: 1px solid #1E293B;
+      padding: 10px 0;
+    }
+    .top-bar-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .top-phones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+    .top-phones a {
+      color: #FFFFFF;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .top-phones a:hover { color: #4ADE80; }
+    .top-phones span.role {
+      color: #94A3B8;
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #34D399;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #34D399;
+    }
+
+    /* Sticky Capsule Header */
+    .header-wrap {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      padding: 0 16px;
+      margin-top: 12px;
+    }
+    .capsule-nav {
+      max-width: 1280px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--tech));
+      color: #FFF;
+      font-weight: 900;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-title { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; line-height: 1.1; }
+    .logo-title span { color: var(--primary); }
+    .logo-sub { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--tech); }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .nav-links a {
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover {
+      background: #F1F5F9;
+      color: var(--primary);
+    }
+    .btn-cta {
+      background: var(--accent);
+      color: #FFF;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+    /* Hero Section with hero.png */
+    .hero {
+      margin: 20px auto 48px;
+      max-width: 1280px;
+      padding: 0 20px;
+    }
+    .hero-card {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      min-height: 540px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px;
+      background-color: #E2E8F0;
+      background-image: linear-gradient(95deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.35) 45%, rgba(255, 255, 255, 0.00) 100%), url('hero.png');
+      background-size: cover;
+      background-position: center right;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+    }
+    .hero-content {
+      max-width: 620px;
+      z-index: 2;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+    .badge-green { background: #DCFCE7; color: var(--primary-dark); }
+    .badge-blue { background: #DBEAFE; color: var(--tech-dark); }
+    .badge-amber { background: #FEF3C7; color: #92400E; }
+
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--dark);
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 16px;
+      color: #334155;
+      margin-bottom: 24px;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #FFF;
+      padding: 12px 22px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-outline {
+      background: #FFFFFF;
+      color: var(--dark);
+      padding: 12px 22px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--tech); color: var(--tech); }
+
+    .hero-notice {
+      margin-top: 28px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px dashed #94A3B8;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #334155;
+      max-width: 600px;
+    }
+
+    /* Section Styling */
+    section { padding: 48px 0; }
+    .section-header { margin-bottom: 32px; }
+    .section-header h2 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 8px;
+    }
+    .section-header p {
+      color: var(--slate);
+      font-size: 15px;
+      max-width: 720px;
+      margin-top: 8px;
+    }
+
+    /* Trading Table & Calculator */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 4px 20px -5px rgba(15, 23, 42, 0.04);
+    }
+    .card-surface { background: var(--surface); }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .price-table th {
+      text-align: left;
+      padding: 12px;
+      background: var(--surface);
+      color: var(--slate);
+      font-size: 12px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .price-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .price-input {
+      width: 100px;
+      padding: 6px 10px;
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: #F0FDF4;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #CBD5E1;
+      border-radius: 12px;
+      font-size: 14px;
+      background: #FFF;
+    }
+    .form-control:focus { outline: none; border-color: var(--tech); }
+
+    .calc-result {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+    .calc-result-val {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* Logistics Fleet & Calculator */
+    .fleet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .fleet-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .fleet-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: #EFF6FF;
+      color: var(--tech);
+      margin-bottom: 10px;
+    }
+    .fleet-card h4 { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+    .fleet-specs { font-size: 13px; color: var(--slate); space-y: 6px; }
+    .fleet-specs div { margin-bottom: 4px; }
+
+    /* Robotics Distribution Style Equipment Catalog */
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #FFF;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--slate);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--dark);
+      color: #FFF;
+      border-color: var(--dark);
+    }
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 22px;
+    }
+    .product-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px -10px rgba(15, 23, 42, 0.08);
+    }
+    .product-cat {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--tech);
+      margin-bottom: 8px;
+    }
+    .product-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+    .product-card p { font-size: 13px; color: var(--slate); margin-bottom: 16px; }
+    .product-specs-list {
+      list-style: none;
+      font-size: 12px;
+      color: #334155;
+      background: var(--surface);
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .product-specs-list li { margin-bottom: 4px; }
+
+    /* Contacts & Requisites */
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .company-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+    .company-box h3 { font-size: 19px; font-weight: 800; margin-bottom: 6px; }
+    .contact-line { margin-top: 10px; font-size: 14px; }
+    .contact-line a { font-weight: 700; color: var(--primary-dark); }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: #94A3B8;
+      padding: 48px 0 28px;
+      margin-top: 60px;
+      font-size: 13px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid #1E293B;
+    }
+    .footer-title { color: #FFF; font-weight: 700; font-size: 15px; margin-bottom: 12px; }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 200;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: #FFF;
+      border-radius: 24px;
+      max-width: 480px;
+      width: 100%;
+      padding: 28px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: #F1F5F9;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero h1 { font-size: 30px; }
+      .hero-card { padding: 28px; min-height: 440px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ВЕРХНЯ СТРІЧКА З УСІМА ТЕЛЕФОНАМИ -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-phones">
+        <div>
+          <a href="tel:+380973521702">+38 (097) 352-17-02</a> <span class="role">(Євгеній — Основний / Логістика)</span>
+        </div>
+        <div>
+          <a href="tel:+380987787139">+38 (098) 778-71-39</a> <span class="role">(Микола — Трейдинг)</span>
+        </div>
+        <div>
+          <a href="tel:+380963586626">+38 (096) 358-66-26</a> <span class="role">(Дмитро — Трейдинг)</span>
+        </div>
+        <div>
+          <a href="tel:+380675046428">+38 (067) 504-64-28</a> <span class="role">(Світлана — Логістика)</span>
+        </div>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span>м. Біла Церква • Пн-Сб</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ШАПКА САЙТУ -->
+  <div class="header-wrap">
+    <header class="capsule-nav">
+      <a href="#top" class="logo">
+        <div class="logo-icon">ZT</div>
+        <div class="logo-text">
+          <div class="logo-title">ZERNO <span>TRADE</span></div>
+          <div class="logo-sub">Energy &amp; Logistic</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#trading">Зернотрейдинг</a>
+        <a href="#logistics">Агрологістика (MAN / DAF)</a>
+        <a href="#equipment">Обладнання та СЕС</a>
+        <a href="#contacts">Контакти та реквізити</a>
+      </nav>
+
+      <button class="btn-cta" onclick="openModal('Загальна консультація B2B')">Зв'язатися з нами</button>
+    </header>
+  </div>
+
+  <!-- ГОЛОВНИЙ ЕКРАН (HERO) З ПІДКЛЮЧЕННЯМ hero.png -->
+  <div id="top" class="hero">
+    <div class="hero-card">
+      <div class="hero-content">
+        <span class="badge badge-green">Агротрейдинг • Логістика • Енергоефективність</span>
+        <h1>ZERNO TRADE Energy &amp; Logistic</h1>
+        <p>
+          Закупівля зернових та олійних культур по всій Україні, перевезення власним автопарком зерновозів MAN і DAF, а також постачання сонячних електростанцій (СЕС), зарядних станцій, агродронів та зернозберігаючого обладнання.
+        </p>
+        <div class="hero-actions">
+          <a href="#trading" class="btn-primary">Закупівельні ціни на зерно</a>
+          <a href="#logistics" class="btn-outline">Розрахувати логістику (1 км)</a>
+          <a href="#equipment" class="btn-outline">Каталог СЕС та обладнання</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- РОЗДІЛ 1: ЗЕРНОТРЕЙДИНГ (ТОВ «ЗЕРНОТРЕЙД 2025») -->
+  <section id="trading" class="container">
+    <div class="section-header">
+      <span class="badge badge-green">ТОВ «ЗЕРНОТРЕЙД 2025» • zernotrade_2025@ukr.net</span>
+      <h2>Зернотрейдинг та закупівельні ціни</h2>
+      <p>
+        Закуповуємо 8 основних культур на умовах CPT (порти, термінали) та EXW (з господарства чи елеватора). Ви можете змінювати ціни прямо в таблиці для швидкого прорахунку партії.
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <!-- Таблиця культур -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+          <h3 style="font-size:18px; font-weight:800;">Індикативні ціни закупівлі (грн/т з ПДВ)</h3>
+          <span style="font-size:12px; color:#64748B;">Можна редагувати ціну в клітинці</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="price-table" id="grain-table">
+            <thead>
+              <tr>
+                <th>Культура</th>
+                <th>Базис</th>
+                <th>Ціна, грн/т</th>
+                <th>Дія</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Пшениця (2 / 3 / 4 клас)</strong></td>
+                <td>CPT / EXW</td>
+                <td><input type="number" class="price-input" value="9400" data-crop="Пшениця" onchange="updateGrainCalc()"></td>
+                <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="selectCrop('Пшениця', this)">Продати</button></td>
+              </tr>
+              <tr>
+                <td><strong>Кукурудза</strong></td>
+                <td>CPT / EXW</td>
+                <td><input type="number" class="price-input" value="8850" data-crop="Кукурудза" onchange="updateGrainCalc()"></td>
+                <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="selectCrop('Кукурудза', this)">Продати</button></td>
+              </tr>
+              <tr>
+                <td><strong>Соняшник</strong></td>
+                <td>CPT / EXW</td>
+                <td><input type="number" class="price-input" value="23500" data-crop="Соняшник" onchange="updateGrainCalc()"></td>
+                <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="selectCrop('Соняшник', this)">Продати</button></td>
+              </tr>
+              <tr>
+                <td><strong>Соя (ГМО / не-ГМО)</strong></td>
+                <td>CPT / EXW</td>
+                <td><input type="number" class="price-input" value="18200" data-crop="Соя" onchange="updateGrainCalc()"></td>
+                <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="selectCrop('Соя', this)">Продати</button></td>
+              </tr>
+              <tr>
+                <td><strong>Ріпак</strong></td>
+                <td>CPT / EXW</td>
+                <td><input type="number" class="price-input" value="22400" data-crop="Ріпак" onchange="updateGrainCalc()"></td>
+                <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="selectCrop('Ріпак', this)">Продати</button></td>
+              </tr>
+              <tr>
+                <td><strong>Ячмінь</strong></td>
+                <td>CPT / EXW</td>
+                <td><input type="number" class="price-input" value="8300" data-crop="Ячмінь" onchange="updateGrainCalc()"></td>
+                <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="selectCrop('Ячмінь', this)">Продати</button></td>
+              </tr>
+              <tr>
+                <td><strong>Овес</strong></td>
+                <td>EXW / Склад</td>
+                <td><input type="number" class="price-input" value="7900" data-crop="Овес" onchange="updateGrainCalc()"></td>
+                <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="selectCrop('Овес', this)">Продати</button></td>
+              </tr>
+              <tr>
+                <td><strong>Гречка</strong></td>
+                <td>EXW / Склад</td>
+                <td><input type="number" class="price-input" value="14500" data-crop="Гречка" onchange="updateGrainCalc()"></td>
+                <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="selectCrop('Гречка', this)">Продати</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Калькулятор партії зерна -->
+      <div class="card card-surface">
+        <h3 style="font-size:18px; font-weight:800; margin-bottom:16px;">Калькулятор вартості партії</h3>
+        <div class="form-group">
+          <label>Оберіть культуру</label>
+          <select id="calc-crop-select" class="form-control" onchange="syncCropPrice()">
+            <option value="Пшениця">Пшениця (2 / 3 / 4 клас)</option>
+            <option value="Кукурудза">Кукурудза</option>
+            <option value="Соняшник">Соняшник</option>
+            <option value="Соя">Соя (ГМО / не-ГМО)</option>
+            <option value="Ріпак">Ріпак</option>
+            <option value="Ячмінь">Ячмінь</option>
+            <option value="Овес">Овес</option>
+            <option value="Гречка">Гречка</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ціна за 1 тонну (грн)</label>
+          <input type="number" id="calc-crop-price" class="form-control" value="9400" oninput="updateGrainCalc()">
+        </div>
+        <div class="form-group">
+          <label>Обсяг партії (тонн)</label>
+          <input type="number" id="calc-crop-tons" class="form-control" value="100" min="1" oninput="updateGrainCalc()">
+        </div>
+        <div class="calc-result">
+          <div style="font-size:12px; font-weight:700; color:#166534; text-transform:uppercase;">Орієнтовна сума виплати:</div>
+          <div class="calc-result-val" id="grain-total-output">940 000 грн</div>
+          <div style="font-size:12px; color:#475569; margin-top:6px;">
+            Відділ закупівель: <strong>Микола (098 778-71-39)</strong>, <strong>Дмитро (096 358-66-26)</strong>
+          </div>
+        </div>
+        <button class="btn-primary" style="width:100%; margin-top:16px;" onclick="openModal('Заявка на продаж зерна: ' + document.getElementById('calc-crop-select').value + ' (' + document.getElementById('calc-crop-tons').value + ' т)')">
+          Зафіксувати ціну та подати заявку
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- РОЗДІЛ 2: АГРОЛОГІСТИКА ТА АВТОПАРК (ТОВ «БСВ-ЛОГІСТИК») -->
+  <section id="logistics" class="container">
+    <div class="section-header">
+      <span class="badge badge-blue">ТОВ «БСВ-ЛОГІСТИК» • bsv-logistic@ukr.net</span>
+      <h2>Агрологістика та власний автопарк (4 MAN + 1 DAF)</h2>
+      <p>
+        Перевезення зернових, олійних та сипучих вантажів по Україні та в напрямку портів. Розрахуйте орієнтовну вартість рейсу за 1 км та ознайомтеся з характеристиками нашого транспорту.
+      </p>
+    </div>
+
+    <!-- Калькулятор вартості 1 км -->
+    <div class="card card-surface" style="margin-bottom:28px;">
+      <h3 style="font-size:18px; font-weight:800; margin-bottom:16px;">Калькулятор вартості перевезення за 1 км</h3>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; align-items:end;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Відстань маршруту (км)</label>
+          <input type="number" id="log-km" class="form-control" value="250" min="1" oninput="updateLogisticsCalc()">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Базовий тариф за 1 км (грн)</label>
+          <input type="number" id="log-rate" class="form-control" value="65" min="1" oninput="updateLogisticsCalc()">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Кількість рейсів / машин</label>
+          <input type="number" id="log-trips" class="form-control" value="1" min="1" oninput="updateLogisticsCalc()">
+        </div>
+        <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px 16px; border-radius:14px;">
+          <div style="font-size:11px; font-weight:700; color:#1E40AF; text-transform:uppercase;">Орієнтовна вартість фрахту:</div>
+          <div style="font-size:22px; font-weight:800; color:#1D4ED8;" id="log-total-output">16 250 грн</div>
+        </div>
+      </div>
+      <div style="margin-top:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <span style="font-size:13px; color:#475569;">
+          Диспетчерська логістики: <strong>Євгеній (097 352-17-02)</strong>, <strong>Світлана (067 504-64-28)</strong>
+        </span>
+        <button class="btn-primary" style="background:var(--tech);" onclick="openModal('Замовлення транспорту: ' + document.getElementById('log-km').value + ' км, машин: ' + document.getElementById('log-trips').value)">
+          Замовити розрахунок маршруту
+        </button>
+      </div>
+    </div>
+
+    <!-- Картки 5 автомобілів (4 MAN + 1 DAF) -->
+    <h3 style="font-size:20px; font-weight:800; margin-bottom:8px;">Склад автопарку ТОВ «БСВ-ЛОГІСТИК»</h3>
+    <p style="font-size:13px; color:var(--slate);">Детальні характеристики та призначення кожної одиниці техніки:</p>
+
+    <div class="fleet-grid">
+      <div class="fleet-card">
+        <div>
+          <span class="fleet-tag">Автомобіль №1 • MAN</span>
+          <h4>MAN TGX (Зерновоз №1)</h4>
+          <div class="fleet-specs">
+            <div><strong>Тип кузова:</strong> Напівпричіп-самоскид / зерновоз</div>
+            <div><strong>Об'єм / Вантажопідйомність:</strong> до 55–65 м³ / до 24–26 т</div>
+            <div><strong>Призначення:</strong> Вивезення зернових та олійних культур з полів і токів на елеватори та в порти.</div>
+          </div>
+        </div>
+        <button class="btn-outline" style="width:100%; margin-top:14px; font-size:12px;" onclick="openModal('Бронювання: MAN TGX (Зерновоз №1)')">Замовити авто</button>
+      </div>
+
+      <div class="fleet-card">
+        <div>
+          <span class="fleet-tag">Автомобіль №2 • MAN</span>
+          <h4>MAN TGX (Зерновоз №2)</h4>
+          <div class="fleet-specs">
+            <div><strong>Тип кузова:</strong> Напівпричіп-зерновоз (алюмінієвий/сталевий)</div>
+            <div><strong>Об'єм / Вантажопідйомність:</strong> до 60–75 м³ / до 24–26 т</div>
+            <div><strong>Призначення:</strong> Магістральні перевезення кукурудзи, пшениці, соняшнику та ріпаку на далекі відстані.</div>
+          </div>
+        </div>
+        <button class="btn-outline" style="width:100%; margin-top:14px; font-size:12px;" onclick="openModal('Бронювання: MAN TGX (Зерновоз №2)')">Замовити авто</button>
+      </div>
+
+      <div class="fleet-card">
+        <div>
+          <span class="fleet-tag">Автомобіль №3 • MAN</span>
+          <h4>MAN TGS / TGX (Зерновоз №3)</h4>
+          <div class="fleet-specs">
+            <div><strong>Тип кузова:</strong> Зерновоз-контейнеровоз / самоскид</div>
+            <div><strong>Об'єм / Вантажопідйомність:</strong> до 55–70 м³ / до 24–25 т</div>
+            <div><strong>Призначення:</strong> Робота в складних польових умовах під час збирання врожаю, оперативна доставка на приймальні пункти.</div>
+          </div>
+        </div>
+        <button class="btn-outline" style="width:100%; margin-top:14px; font-size:12px;" onclick="openModal('Бронювання: MAN (Зерновоз №3)')">Замовити авто</button>
+      </div>
+
+      <div class="fleet-card">
+        <div>
+          <span class="fleet-tag">Автомобіль №4 • MAN</span>
+          <h4>MAN TGS / TGX (Зерновоз №4)</h4>
+          <div class="fleet-specs">
+            <div><strong>Тип кузова:</strong> Напівпричіп для сипучих вантажів</div>
+            <div><strong>Об'єм / Вантажопідйомність:</strong> до 65–80 м³ / до 24–26 т</div>
+            <div><strong>Призначення:</strong> Перевезення легких та об'ємних культур (соняшник, овес, ячмінь, гречка, шрот).</div>
+          </div>
+        </div>
+        <button class="btn-outline" style="width:100%; margin-top:14px; font-size:12px;" onclick="openModal('Бронювання: MAN (Зерновоз №4)')">Замовити авто</button>
+      </div>
+
+      <div class="fleet-card">
+        <div>
+          <span class="fleet-tag" style="background:#FEF3C7; color:#92400E;">Автомобіль №5 • DAF</span>
+          <h4>DAF XF (Зерновоз №5)</h4>
+          <div class="fleet-specs">
+            <div><strong>Тип кузова:</strong> Магістральний автопоїзд-зерновоз</div>
+            <div><strong>Об'єм / Вантажопідйомність:</strong> до 60–75 м³ / до 24–26 т</div>
+            <div><strong>Призначення:</strong> Економічні міжрегіональні та портові рейси (Одеса, Чорноморськ, Південний, Дунайські порти).</div>
+          </div>
+        </div>
+        <button class="btn-outline" style="width:100%; margin-top:14px; font-size:12px;" onclick="openModal('Бронювання: DAF XF (Зерновоз №5)')">Замовити авто</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- РОЗДІЛ 3: ОБЛАДНАННЯ, СЕС, ЗАРЯДНІ СТАНЦІЇ ТА ЗЕРНОЗБЕРІГАННЯ (У СТИЛІ ROBOTICS DISTRIBUTION) -->
+  <section id="equipment" class="container">
+    <div class="section-header">
+      <span class="badge badge-amber">Технологічний каталог • Дистрибуція та монтаж під ключ</span>
+      <h2>СЕС, Зарядні станції, Зернозберігаюче обладнання та Агродрони</h2>
+      <p>
+        Комплексні рішення для енергонезалежності агропідприємств, елеваторів та бізнесу. Оберіть категорію обладнання для перегляду характеристик.
+      </p>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="tab-btn active" onclick="filterCatalog('all', this)">Усе обладнання</button>
+      <button class="tab-btn" onclick="filterCatalog('solar', this)">Сонячні електростанції (СЕС) та УЗЕ</button>
+      <button class="tab-btn" onclick="filterCatalog('ev', this)">Зарядні станції EV</button>
+      <button class="tab-btn" onclick="filterCatalog('grain-storage', this)">Зернозберігаюче обладнання</button>
+      <button class="tab-btn" onclick="filterCatalog('drones', this)">Агродрони-обприскувачі</button>
+    </div>
+
+    <div class="catalog-grid" id="catalog-grid">
+      <!-- СЕС -->
+      <div class="product-card" data-category="solar">
+        <div>
+          <div class="product-cat">Сонячна енергетика (СЕС)</div>
+          <h3>Промислові та дахові СЕС для агропідприємств</h3>
+          <p>Проєктування та встановлення сонячних панелей на дахах складів, ангарів та елеваторів для власного споживання.</p>
+          <ul class="product-specs-list">
+            <li><strong>Потужність:</strong> від 30 кВт до 1+ МВт</li>
+            <li><strong>Комплектація:</strong> Монокристалічні панелі Tier-1, мережеві та гібридні інвертори</li>
+            <li><strong>Ефект:</strong> Зниження витрат на електроенергію до 70%</li>
+          </ul>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="openModal('Запит КП: Промислова СЕС для агропідприємства')">Отримати розрахунок СЕС</button>
+      </div>
+
+      <!-- Системи накопичення -->
+      <div class="product-card" data-category="solar">
+        <div>
+          <div class="product-cat">Системи накопичення (УЗЕ)</div>
+          <h3>Промислові батареї LiFePO4 (Energy Storage)</h3>
+          <p>Високовольтні системи зберігання енергії для безперебійної роботи сушарок, вагових комплексів та офісів під час відключень.</p>
+          <ul class="product-specs-list">
+            <li><strong>Ємність:</strong> від 50 кВт·год до 2 МВт·год</li>
+            <li><strong>Ресурс:</strong> понад 6000 циклів заряду/розряду</li>
+            <li><strong>Автоматика:</strong> Миттєве перемикання на резерв</li>
+          </ul>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="openModal('Запит КП: Система накопичення енергії (УЗЕ)')">Підібрати потужність</button>
+      </div>
+
+      <!-- Зарядні станції -->
+      <div class="product-card" data-category="ev">
+        <div>
+          <div class="product-cat">Зарядна інфраструктура EV</div>
+          <h3>Швидкісні зарядні станції DC / AC для легкових та вантажних авто</h3>
+          <p>Комерційні та корпоративні зарядні хаби для автопарків, логістичних баз та АЗК.</p>
+          <ul class="product-specs-list">
+            <li><strong>Потужність AC / DC:</strong> 22 кВт / 60–320 кВт</li>
+            <li><strong>Конектори:</strong> CCS2, GB/T, Type 2</li>
+            <li><strong>Керування:</strong> OCPP 1.6/2.0, білінг та моніторинг</li>
+          </ul>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="openModal('Запит КП: Зарядні станції для електромобілів')">Замовити консультацію</button>
+      </div>
+
+      <!-- Зернозберігаюче обладнання 1 -->
+      <div class="product-card" data-category="grain-storage">
+        <div>
+          <div class="product-cat">Зернозберігаюче обладнання</div>
+          <h3>Металеві силоси для зберігання зерна (плоскодонні та конусні)</h3>
+          <p>Постачання та монтаж оцинкованих силосів для тривалого та оперативного зберігання зернових і олійних культур.</p>
+          <ul class="product-specs-list">
+            <li><strong>Місткість:</strong> від 100 до 10 000+ тонн на один силос</li>
+            <li><strong>Оснащення:</strong> Системи активного вентилювання та термометрії</li>
+            <li><strong>Додатково:</strong> Розвантажувальні шнеки та зачисні механізми</li>
+          </ul>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="openModal('Запит КП: Силоси для зберігання зерна')">Розрахувати силосний комплекс</button>
+      </div>
+
+      <!-- Зернозберігаюче обладнання 2 -->
+      <div class="product-card" data-category="grain-storage">
+        <div>
+          <div class="product-cat">Зернозберігаюче та сушильне обладнання</div>
+          <h3>Зерносушарки, норії та транспортні системи</h3>
+          <p>Шахтні та модульні зерносушарки, стрічкові конвеєри, ланцюгові транспортери та зерноочисні сепаратори.</p>
+          <ul class="product-specs-list">
+            <li><strong>Продуктивність:</strong> від 15 до 150 т/год</li>
+            <li><strong>Паливо:</strong> Газ, дизель, тверде паливо / біомаса</li>
+            <li><strong>Сервіс:</strong> Шеф-монтаж та пусконалагодження</li>
+          </ul>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="openModal('Запит КП: Зерносушарки та транспортне обладнання')">Отримати специфікацію</button>
+      </div>
+
+      <!-- Агродрони -->
+      <div class="product-card" data-category="drones">
+        <div>
+          <div class="product-cat">Агроробототехніка</div>
+          <h3>Агродрони-обприскувачі (DJI Agras / XAG)</h3>
+          <p>Високоточне ультрамалооб'ємне внесення ЗЗР, десикація соняшнику та ріпаку, розкидання сипучих добрив без ущільнення ґрунту.</p>
+          <ul class="product-specs-list">
+            <li><strong>Бак для обприскування:</strong> 40–50 л</li>
+            <li><strong>Продуктивність:</strong> до 18–22 га/год</li>
+            <li><strong>Комплект:</strong> Дрон, RTK-станція, генератор та навчання пілотів</li>
+          </ul>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="openModal('Запит КП: Агродрон-обприскувач')">Дізнатися вартість та наявність</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- РОЗДІЛ 4: КОНТАКТИ, ПОШТА ТА РЕКВІЗИТИ КОМПАНІЙ -->
+  <section id="contacts" class="container">
+    <div class="section-header">
+      <span class="badge badge-green">Офіційні реквізити • м. Біла Церква</span>
+      <h2>Контакти компаній та зворотний зв'язок</h2>
+      <p>Зв'яжіться напряму з відповідальним менеджером потрібного напряму або надішліть запит на електронну пошту компанії.</p>
+    </div>
+
+    <div class="contacts-grid">
+      <!-- Компанія 1 -->
+      <div class="company-box">
+        <span class="badge badge-green">Зернотрейдинг та обладнання</span>
+        <h3>ТОВ «ЗЕРНОТРЕЙД 2025»</h3>
+        <div style="font-size:13px; color:var(--slate); margin-top:8px;">
+          <div><strong>Код ЄДРПОУ:</strong> 45829768</div>
+          <div><strong>Адреса:</strong> 09100, Київська обл., м. Біла Церква, бульвар Олександрійський, буд. 106, кімн. 136</div>
+        </div>
+        <div class="contact-line">
+          <div><strong>Email:</strong> <a href="mailto:zernotrade_2025@ukr.net">zernotrade_2025@ukr.net</a></div>
+          <div style="margin-top:6px;"><strong>Микола:</strong> <a href="tel:+380987787139">+38 (098) 778-71-39</a></div>
+          <div><strong>Дмитро:</strong> <a href="tel:+380963586626">+38 (096) 358-66-26</a></div>
+        </div>
+      </div>
+
+      <!-- Компанія 2 -->
+      <div class="company-box">
+        <span class="badge badge-blue">Агрологістика та автопарк</span>
+        <h3>ТОВ «БСВ-ЛОГІСТИК»</h3>
+        <div style="font-size:13px; color:var(--slate); margin-top:8px;">
+          <div><strong>Код ЄДРПОУ:</strong> 46123104</div>
+          <div><strong>Адреса:</strong> 09100, Київська обл., м. Біла Церква, бульвар Олександрійський, буд. 106, офіс 136</div>
+        </div>
+        <div class="contact-line">
+          <div><strong>Email:</strong> <a href="mailto:bsv-logistic@ukr.net">bsv-logistic@ukr.net</a></div>
+          <div style="margin-top:6px;"><strong>Євгеній:</strong> <a href="tel:+380973521702">+38 (097) 352-17-02</a></div>
+          <div><strong>Світлана:</strong> <a href="tel:+380675046428">+38 (067) 504-64-28</a></div>
+        </div>
+      </div>
+
+      <!-- Форма швидкої відправки на email компанії -->
+      <div class="card">
+        <h3 style="font-size:18px; font-weight:800; margin-bottom:12px;">Надіслати запит на пошту компанії</h3>
+        <form onsubmit="sendEmailRequest(event)">
+          <div class="form-group">
+            <label>Отримувач (Компанія)</label>
+            <select id="mail-target" class="form-control">
+              <option value="zernotrade_2025@ukr.net">ТОВ «ЗЕРНОТРЕЙД 2025» (zernotrade_2025@ukr.net)</option>
+              <option value="bsv-logistic@ukr.net">ТОВ «БСВ-ЛОГІСТИК» (bsv-logistic@ukr.net)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ваше ім'я та телефон *</label>
+            <input type="text" id="mail-sender" class="form-control" required placeholder="Олександр, +38 (0XX) XXX-XX-XX">
+          </div>
+          <div class="form-group">
+            <label>Суть запиту *</label>
+            <textarea id="mail-body" class="form-control" rows="3" required placeholder="Культура, тоннаж, маршрут або модель обладнання..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;">Сформувати лист та відправити →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ФУТЕР -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">ZERNO TRADE Energy &amp; Logistic</div>
+          <p>Національний оператор зернотрейдингу, агрологістики, сонячної енергетики, зарядних систем та зернозберігаючого обладнання.</p>
+        </div>
+        <div>
+          <div class="footer-title">ТОВ «ЗЕРНОТРЕЙД 2025»</div>
+          <p>ЄДРПОУ 45829768</p>
+          <p>zernotrade_2025@ukr.net</p>
+          <p>+38 (098) 778-71-39 Микола</p>
+          <p>+38 (096) 358-66-26 Дмитро</p>
+        </div>
+        <div>
+          <div class="footer-title">ТОВ «БСВ-ЛОГІСТИК»</div>
+          <p>ЄДРПОУ 46123104</p>
+          <p>bsv-logistic@ukr.net</p>
+          <p>+38 (097) 352-17-02 Євгеній</p>
+          <p>+38 (067) 504-64-28 Світлана</p>
+        </div>
+      </div>
+      <div style="margin-top:24px; text-align:center; font-size:12px;">
+        © 2026 ZERNO TRADE Energy &amp; Logistic. м. Біла Церква, бульвар Олександрійський, буд. 106.
+      </div>
+    </div>
+  </footer>
+
+  <!-- МОДАЛЬНЕ ВІКНО ЗАЯВКИ -->
+  <div class="modal-backdrop" id="consult-modal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <span class="badge badge-green">Швидка заявка B2B</span>
+      <h3 style="font-size:20px; font-weight:800; margin-bottom:8px;" id="modal-subject-title">Консультація спеціаліста</h3>
+      <p style="font-size:13px; color:var(--slate); margin-bottom:16px;">Заповніть дані — відкриється ваш поштовий клієнт із готовим листом на відповідну компанію або зателефонуйте напряму.</p>
+      <form onsubmit="submitModalEmail(event)">
+        <div class="form-group">
+          <label>Напрям / Компанія</label>
+          <select id="modal-company" class="form-control">
+            <option value="zernotrade_2025@ukr.net">ТОВ «ЗЕРНОТРЕЙД 2025» (Зерно / Обладнання)</option>
+            <option value="bsv-logistic@ukr.net">ТОВ «БСВ-ЛОГІСТИК» (Автопарк MAN / DAF)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ваше ім'я *</label>
+          <input type="text" id="modal-user-name" class="form-control" required placeholder="Введіть ім'я">
+        </div>
+        <div class="form-group">
+          <label>Номер телефону *</label>
+          <input type="tel" id="modal-user-phone" class="form-control" required placeholder="+38 (0XX) XXX-XX-XX">
+        </div>
+        <div class="form-group">
+          <label>Деталі запиту</label>
+          <textarea id="modal-user-note" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;">Надіслати запит</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Калькулятор зерна
+    function syncCropPrice() {
+      const crop = document.getElementById('calc-crop-select').value;
+      const input = document.querySelector('#grain-table input[data-crop="' + crop + '"]');
+      if (input) {
+        document.getElementById('calc-crop-price').value = input.value;
+      }
+      updateGrainCalc();
+    }
+
+    function updateGrainCalc() {
+      const price = parseFloat(document.getElementById('calc-crop-price').value) || 0;
+      const tons = parseFloat(document.getElementById('calc-crop-tons').value) || 0;
+      const total = Math.round(price * tons);
+      document.getElementById('grain-total-output').textContent = total.toLocaleString('uk-UA') + ' грн';
+    }
+
+    function selectCrop(cropName, btn) {
+      document.getElementById('calc-crop-select').value = cropName;
+      syncCropPrice();
+      document.getElementById('calc-crop-tons').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Калькулятор логістики (1 км)
+    function updateLogisticsCalc() {
+      const km = parseFloat(document.getElementById('log-km').value) || 0;
+      const rate = parseFloat(document.getElementById('log-rate').value) || 0;
+      const trips = parseFloat(document.getElementById('log-trips').value) || 1;
+      const total = Math.round(km * rate * trips);
+      document.getElementById('log-total-output').textContent = total.toLocaleString('uk-UA') + ' грн';
+    }
+
+    // Фільтр каталогу обладнання
+    function filterCatalog(category, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.product-card').forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Модальне вікно
+    function openModal(subject) {
+      document.getElementById('modal-subject-title').textContent = subject;
+      document.getElementById('modal-user-note').value = subject;
+      if (subject.includes('транспорту') || subject.includes('MAN') || subject.includes('DAF')) {
+        document.getElementById('modal-company').value = 'bsv-logistic@ukr.net';
+      } else {
+        document.getElementById('modal-company').value = 'zernotrade_2025@ukr.net';
+      }
+      document.getElementById('consult-modal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('consult-modal').classList.remove('open');
+    }
+
+    function submitModalEmail(e) {
+      e.preventDefault();
+      const email = document.getElementById('modal-company').value;
+      const name = document.getElementById('modal-user-name').value;
+      const phone = document.getElementById('modal-user-phone').value;
+      const note = document.getElementById('modal-user-note').value;
+      const subject = encodeURIComponent('Запит із сайту ZERNO TRADE: ' + note);
+      const body = encodeURIComponent('Ім'я: ' + name + '
+Телефон: ' + phone + '
+Деталі: ' + note);
+      window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
+      closeModal();
+    }
+
+    function sendEmailRequest(e) {
+      e.preventDefault();
+      const email = document.getElementById('mail-target').value;
+      const sender = document.getElementById('mail-sender').value;
+      const msg = document.getElementById('mail-body').value;
+      const subject = encodeURIComponent('Запит від клієнта (' + sender + ')');
+      const body = encodeURIComponent('Контакт клієнта: ' + sender + '
+
+Повідомлення:
+' + msg);
+      window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
+    }
+  </script>
+</body>
+</html>
