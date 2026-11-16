@@ -238,17 +238,6 @@
     }
     .btn-outline:hover { border-color: var(--tech); color: var(--tech); }
 
-    .hero-notice {
-      margin-top: 28px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px dashed #94A3B8;
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-size: 12px;
-      color: #334155;
-      max-width: 600px;
-    }
-
     /* Section Styling */
     section { padding: 48px 0; }
     .section-header { margin-bottom: 32px; }
@@ -369,7 +358,7 @@
       margin-bottom: 10px;
     }
     .fleet-card h4 { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
-    .fleet-specs { font-size: 13px; color: var(--slate); space-y: 6px; }
+    .fleet-specs { font-size: 13px; color: var(--slate); }
     .fleet-specs div { margin-bottom: 4px; }
 
     /* Robotics Distribution Style Equipment Catalog */
@@ -570,7 +559,6 @@
           <a href="#logistics" class="btn-outline">Розрахувати логістику (1 км)</a>
           <a href="#equipment" class="btn-outline">Каталог СЕС та обладнання</a>
         </div>
-        
       </div>
     </div>
   </div>
@@ -590,7 +578,7 @@
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
           <h3 style="font-size:18px; font-weight:800;">Індикативні ціни закупівлі (грн/т з ПДВ)</h3>
-          <span style="font-size:12px; color:#64748B;">Можна редагувати ціну в клітинці</span>
+          <span id="price-sync-status" style="font-size:12px; color:#16A34A; font-weight:600;">Оновлення цін із бази...</span>
         </div>
         <div style="overflow-x:auto;">
           <table class="price-table" id="grain-table">
@@ -674,7 +662,7 @@
         </div>
         <div class="form-group">
           <label>Ціна за 1 тонну (грн)</label>
-          <input type="number" id="calc-crop-price" class="form-control" value="9400" oninput="updateGrainCalc()">
+          <input type="number" id="calc-crop-price" class="form-control" value="8000" oninput="updateGrainCalc()">
         </div>
         <div class="form-group">
           <label>Обсяг партії (тонн)</label>
@@ -682,7 +670,7 @@
         </div>
         <div class="calc-result">
           <div style="font-size:12px; font-weight:700; color:#166534; text-transform:uppercase;">Орієнтовна сума виплати:</div>
-          <div class="calc-result-val" id="grain-total-output">940 000 грн</div>
+          <div class="calc-result-val" id="grain-total-output">800 000 грн</div>
           <div style="font-size:12px; color:#475569; margin-top:6px;">
             Відділ закупівель: <strong>Микола (098 778-71-39)</strong>, <strong>Дмитро (096 358-66-26)</strong>
           </div>
@@ -807,7 +795,7 @@
     </div>
   </section>
 
-  <!-- РОЗДІЛ 3: ОБЛАДНАННЯ, СЕС, ЗАРЯДНІ СТАНЦІЇ ТА ЗЕРНОЗБЕРІГАННЯ (У СТИЛІ ROBOTICS DISTRIBUTION) -->
+  <!-- РОЗДІЛ 3: ОБЛАДНАННЯ, СЕС, ЗАРЯДНІ СТАНЦІЇ ТА ЗЕРНОЗБЕРІГАННЯ -->
   <section id="equipment" class="container">
     <div class="section-header">
       <span class="badge badge-amber">Технологічний каталог • Дистрибуція та монтаж під ключ</span>
@@ -816,10 +804,10 @@
         Комплексні рішення для енергонезалежності агропідприємств, елеваторів та бізнесу. Оберіть категорію обладнання для перегляду характеристик.
       </p>
     </div>
-<div style="display: inline-flex; align-items: center; gap: 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 20px; margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-  <img src="ecoflow.jpg" alt="EcoFlow" style="height: 36px; width: auto; border-radius: 4px;">
-  <span style="font-weight: 600; color: #1e293b; font-size: 15px;">Офіційний енергетичний партнер EcoFlow</span>
-</div>
+    <div style="display: inline-flex; align-items: center; gap: 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 20px; margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+      <img src="ecoflow.jpg" alt="EcoFlow" style="height: 36px; width: auto; border-radius: 4px;">
+      <span style="font-weight: 600; color: #1e293b; font-size: 15px;">Офіційний енергетичний партнер EcoFlow</span>
+    </div>
 
     <div class="filter-tabs">
       <button class="tab-btn active" onclick="filterCatalog('all', this)">Усе обладнання</button>
@@ -1048,6 +1036,49 @@
   </div>
 
   <script>
+    // Посилання на вашу Google Таблицю з цінами
+    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ8qDbfJxmbNTKSMHhkphUa_tRbzh_Sn1eZPZH4R7t9aHNviqMXHJDWSEIlUoeL6ZYrNhObETulOAOQ/pub?output=csv';
+
+    // Автоматичне завантаження цін із Google Таблиці
+    async function loadPricesFromGoogleSheets() {
+      const statusEl = document.getElementById('price-sync-status');
+      try {
+        const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + Date.now());
+        if (!response.ok) throw new Error('Помилка завантаження');
+        const csvText = await response.text();
+        const rows = csvText.split(/\r?\n/);
+
+        rows.forEach(row => {
+          const cols = row.split(',');
+          if (cols.length >= 2) {
+            const cropName = cols[0].replace(/^"|"$/g, '').trim();
+            const rawPrice = cols[1].replace(/^"|"$/g, '').replace(/\s+/g, '').trim();
+            const priceVal = parseFloat(rawPrice);
+
+            if (cropName && !isNaN(priceVal) && priceVal > 0) {
+              const input = document.querySelector('#grain-table input[data-crop="' + cropName + '"]');
+              if (input) {
+                input.value = priceVal;
+              }
+            }
+          }
+        });
+
+        syncCropPrice();
+        if (statusEl) {
+          statusEl.textContent = 'Ціни актуальні (синхронізовано)';
+        }
+      } catch (err) {
+        if (statusEl) {
+          statusEl.textContent = 'Можна редагувати ціну в клітинці';
+          statusEl.style.color = '#64748B';
+        }
+      }
+    }
+
+    // Запускаємо завантаження цін при відкритті сайту
+    document.addEventListener('DOMContentLoaded', loadPricesFromGoogleSheets);
+
     // Калькулятор зерна
     function syncCropPrice() {
       const crop = document.getElementById('calc-crop-select').value;
@@ -1116,9 +1147,7 @@
       const phone = document.getElementById('modal-user-phone').value;
       const note = document.getElementById('modal-user-note').value;
       const subject = encodeURIComponent('Запит із сайту ZERNO TRADE: ' + note);
-      const body = encodeURIComponent('Ім'я: ' + name + '
-Телефон: ' + phone + '
-Деталі: ' + note);
+      const body = encodeURIComponent("Ім'я: " + name + "\nТелефон: " + phone + "\nДеталі: " + note);
       window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
       closeModal();
     }
@@ -1129,10 +1158,7 @@
       const sender = document.getElementById('mail-sender').value;
       const msg = document.getElementById('mail-body').value;
       const subject = encodeURIComponent('Запит від клієнта (' + sender + ')');
-      const body = encodeURIComponent('Контакт клієнта: ' + sender + '
-
-Повідомлення:
-' + msg);
+      const body = encodeURIComponent("Контакт клієнта: " + sender + "\n\nПовідомлення:\n" + msg);
       window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
     }
   </script>
