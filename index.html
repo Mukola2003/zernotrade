@@ -1141,29 +1141,43 @@
     }
 
     function submitModalEmail(e) {
-      e.preventDefault();
-      const email = document.getElementById('modal-company').value;
-      const name = document.getElementById('modal-user-name').value;
-      const phone = document.getElementById('modal-user-phone').value;
-      const note = document.getElementById('modal-user-note').value;
-      const subject = encodeURIComponent('Запит із сайту ZERNO TRADE: ' + note);
-      const body = encodeURIComponent("Ім'я: " + name + "\nТелефон: " + phone + "\nДеталі: " + note);
-      window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
-      closeModal();
-    }
+    e.preventDefault();
+    const company = document.getElementById('modal-company')?.value || '';
+    const name = document.getElementById('modal-user-name')?.value || '';
+    const phone = document.getElementById('modal-user-phone')?.value || '';
+    const note = document.getElementById('modal-user-note')?.value || '';
 
-    function sendEmailRequest(e) {
-      e.preventDefault();
-      const email = document.getElementById('mail-target').value;
-      const sender = document.getElementById('mail-sender').value;
-      const msg = document.getElementById('mail-body').value;
-      const subject = encodeURIComponent('Запит від клієнта (' + sender + ')');
-      const body = encodeURIComponent("Контакт клієнта: " + sender + "\n\nПовідомлення:\n" + msg);
-      window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
-    }
-  <script>
-const TG_BOT_TOKEN = '9138516172:AAFhAwNGt3t-IwJp0nA4j03_j16pCHgmRio';
-const TG_CHAT_ID = '-5296353205';
+    const message = `🌾 <b>Нова заявка з сайту ZERNO TRADE</b>\n\n<b>Напрямок:</b> ${company}\n<b>Ім'я:</b> ${name}\n<b>Телефон:</b> ${phone}\n<b>Деталі:</b> ${note}`;
+    sendToTelegram(message).then(ok => {
+      if (ok) {
+        alert('✅ Дякуємо! Заявку передано менеджерам.');
+        closeModal();
+      } else {
+        alert('⚠️ Помилка відправки в Telegram.');
+      }
+    });
+  }
+
+  function sendEmailRequest(e) {
+    e.preventDefault();
+    const target = document.getElementById('mail-target')?.value || '';
+    const sender = document.getElementById('mail-sender')?.value || '';
+    const msg = document.getElementById('mail-body')?.value || '';
+
+    const message = `📩 <b>Запит із нижньої форми ZERNO TRADE</b>\n\n<b>Кому:</b> ${target}\n<b>Контакт клієнта:</b> ${sender}\n<b>Повідомлення:</b> ${msg}`;
+    sendToTelegram(message).then(ok => {
+      if (ok) {
+        alert('✅ Дякуємо! Повідомлення надіслано в Telegram.');
+        document.getElementById('mail-sender').value = '';
+        document.getElementById('mail-body').value = '';
+      } else {
+        alert('⚠️ Помилка відправки в Telegram.');
+      }
+    });
+  }
+
+  const TG_BOT_TOKEN = '9138516172:AAFhAwNGt3t-IwJp0nA4j03_j16pCHgmRio';
+  const TG_CHAT_ID = '-5296353205';
 
   async function sendToTelegram(text) {
     const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
@@ -1178,40 +1192,7 @@ const TG_CHAT_ID = '-5296353205';
     });
     return response.ok;
   }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('form').forEach(form => {
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = form.querySelector('button[type="submit"], button');
-        const oldText = btn ? btn.innerText : '';
-        if (btn) { btn.disabled = true; btn.innerText = 'Відправка...'; }
-
-        let message = '🌾 <b>Нова заявка з сайту ZERNO TRADE</b>\n\n';
-        const fields = form.querySelectorAll('input, select, textarea');
-        fields.forEach(field => {
-          if (field.value && field.type !== 'submit') {
-            const label = field.placeholder || field.name || field.id || 'Поле';
-            message += `<b>${label}:</b> ${field.value}\n`;
-          }
-        });
-
-        try {
-          const ok = await sendToTelegram(message);
-          if (ok) {
-            alert('✅ Дякуємо! Заявку передано менеджерам. Ми зв’яжемося з вами найближчим часом.');
-            form.reset();
-          } else {
-            alert('⚠️ Помилка відправки. Будь ласка, зателефонуйте нам за номером у контактах.');
-          }
-        } catch (err) {
-          alert('⚠️ Помилка з’єднання. Перевірте інтернет або зателефонуйте нам.');
-        } finally {
-          if (btn) { btn.disabled = false; btn.innerText = oldText; }
-        }
-      });
-    });
-  });
 </script>
+  
 </body>
 </html>
