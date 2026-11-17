@@ -692,7 +692,50 @@
       </p>
     </div>
 
-    <!-- Калькулятор вартості 1 км -->
+   
+<!-- Таблиця тарифів на перевезення -->
+    <div class="card card-surface" style="margin-bottom:28px;">
+      <h3 style="font-size:18px; font-weight:800; margin-bottom:16px;">Індикативні тарифи на перевезення (грн/км з ПДВ)</h3>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse;">
+          <thead>
+            <tr>
+              <th>НАПРЯМОК / МАРШРУТ</th>
+              <th>ТИП ТРАНСПОРТУ</th>
+              <th>ТАРИФ (ГРН/КМ)</th>
+              <th>ДІЯ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>По області (до 150 км)</strong></td>
+              <td>Зерновоз MAN / DAF (40–45 м³)</td>
+              <td><input type="number" class="price-input" value="75" onchange="document.getElementById('log-rate').value=this.value; updateLogisticsCalc();"></td>
+              <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="const r=this.closest('tr').querySelector('input').value; document.getElementById('log-rate').value=r; document.getElementById('log-km').value=150; updateLogisticsCalc();">Розрахувати</button></td>
+            </tr>
+            <tr>
+              <td><strong>Напрямок портів Одеси / Чорноморська</strong></td>
+              <td>Зерновоз MAN / DAF (до 24 т)</td>
+              <td><input type="number" class="price-input" value="65" onchange="document.getElementById('log-rate').value=this.value; updateLogisticsCalc();"></td>
+              <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="const r=this.closest('tr').querySelector('input').value; document.getElementById('log-rate').value=r; document.getElementById('log-km').value=450; updateLogisticsCalc();">Розрахувати</button></td>
+            </tr>
+            <tr>
+              <td><strong>Міжобласні перевезення по Україні</strong></td>
+              <td>Зерновоз / самоскид</td>
+              <td><input type="number" class="price-input" value="68" onchange="document.getElementById('log-rate').value=this.value; updateLogisticsCalc();"></td>
+              <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="const r=this.closest('tr').querySelector('input').value; document.getElementById('log-rate').value=r; document.getElementById('log-km').value=300; updateLogisticsCalc();">Розрахувати</button></td>
+            </tr>
+            <tr>
+              <td><strong>Перевезення олійних та сипучих вантажів</strong></td>
+              <td>Зерновоз MAN / DAF</td>
+              <td><input type="number" class="price-input" value="70" onchange="document.getElementById('log-rate').value=this.value; updateLogisticsCalc();"></td>
+              <td><button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="const r=this.closest('tr').querySelector('input').value; document.getElementById('log-rate').value=r; document.getElementById('log-km').value=250; updateLogisticsCalc();">Розрахувати</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-<!-- Калькулятор вартості 1 км -->
     <div class="card card-surface" style="margin-bottom:28px;">
       <h3 style="font-size:18px; font-weight:800; margin-bottom:16px;">Калькулятор вартості перевезення за 1 км</h3>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; align-items:end;">
@@ -1196,6 +1239,54 @@ const TG_BOT_TOKEN = '9138516172:AAGX7etLn49qcdtN8oqLIRMjSlcymnT1mkg';
   }
   return data.ok;
 }
+    
+    
+    
+// Автоматичне завантаження цін із Google Таблиць (Зерно + Агрологістика)
+const GRAIN_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ8qDbfJxmbNTKSMHhkphUa_tRbzh_Sn1eZPZH4R7t9aHNviqMXHJDWSEIlUoeL6ZYrNhObETulOAOQ/pub?gid=0&single=true&output=csv';
+const LOGISTICS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ8qDbfJxmbNTKSMHhkphUa_tRbzh_Sn1eZPZH4R7t9aHNviqMXHJDWSEIlUoeL6ZYrNhObETulOAOQ/pub?gid=1163723894&single=true&output=csv';
+
+async function loadPricesFromSheets() {
+  try {
+    // 1. Завантаження цін на зерно (Лист1: назва у 1-му стовпці, ціна у 2-му)
+    const grainRes = await fetch(GRAIN_CSV_URL);
+    const grainText = await grainRes.text();
+    grainText.split('\n').forEach(line => {
+      const cols = line.split(',');
+      if (cols.length >= 2) {
+        const crop = cols[0].replace(/"/g, '').trim();
+        const price = parseFloat(cols[1].replace(/"/g, '').trim());
+        if (crop && !isNaN(price)) {
+          const input = document.querySelector(`input[data-crop="${crop}"]`);
+          if (input) input.value = price;
+        }
+      }
+    });
+    if (typeof updateGrainCalc === 'function') updateGrainCalc();
+
+    // 2. Завантаження тарифів агрологістики (Лист2: назва у 1-му стовпці, цифра в останньому заповненому)
+    const logRes = await fetch(LOGISTICS_CSV_URL);
+    const logText = await logRes.text();
+    const logInputs = document.querySelectorAll('#logistics table input.price-input');
+    const lines = logText.split('\n').filter(l => l.trim() !== '');
+    lines.forEach((line, index) => {
+      const cols = line.split(',').map(c => c.replace(/"/g, '').trim()).filter(c => c !== '');
+      const rate = parseFloat(cols[cols.length - 1]);
+      if (logInputs[index] && !isNaN(rate)) {
+        logInputs[index].value = rate;
+        if (index === 0) {
+          const mainRate = document.getElementById('log-rate');
+          if (mainRate) mainRate.value = rate;
+        }
+      }
+    });
+    if (typeof updateLogisticsCalc === 'function') updateLogisticsCalc();
+  } catch (e) {
+    console.error('Помилка оновлення цін із Google Таблиць:', e);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', loadPricesFromSheets);
 </script>
   
 </body>
