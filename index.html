@@ -1180,18 +1180,22 @@ const TG_BOT_TOKEN = '9138516172:AAGX7etLn49qcdtN8oqLIRMjSlcymnT1mkg';
   const TG_CHAT_ID = '-5296353205';
 
   async function sendToTelegram(text) {
-    const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TG_CHAT_ID,
-        text: text,
-        parse_mode: 'HTML'
-      })
-    });
-    return response.ok;
+  const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: TG_CHAT_ID,
+      text: text,
+      parse_mode: 'HTML'
+    })
+  });
+  const data = await response.json();
+  if (!data.ok) {
+    alert('Причина від Telegram: ' + data.description);
   }
+  return data.ok;
+}
 </script>
   
 </body>
