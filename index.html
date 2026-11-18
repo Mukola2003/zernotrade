@@ -1289,6 +1289,42 @@ async function loadPricesFromSheets() {
 
 window.addEventListener('DOMContentLoaded', loadPricesFromSheets);
 </script>
+<!-- Рекламний слайдер СЕС для агробізнесу -->
+<section id="ses-promo" style="max-width: 1280px; margin: 40px auto; padding: 0 15px;">
+  <div style="position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.12); background: #1e241b;">
+    <div id="zt-slides" style="display: flex; transition: transform 0.5s ease-in-out;">
+      <img src="slide-ses-1.jpg" alt="Сонячні електростанції для агробізнесу" style="width: 100%; flex-shrink: 0; display: block;">
+      <img src="slide-ses-2.jpg" alt="Енергія для кожного напрямку агробізнесу" style="width: 100%; flex-shrink: 0; display: block;">
+      <img src="slide-ses-3.jpg" alt="Обладнання Jinko Solar та DEYE" style="width: 100%; flex-shrink: 0; display: block;">
+    </div>
+    <button onclick="moveZtSlide(-1)" style="position: absolute; top: 50%; left: 12px; transform: translateY(-50%); background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer;">&#10094;</button>
+    <button onclick="moveZtSlide(1)" style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer;">&#10095;</button>
+  </div>
+</section>
+
+<script>
+  let ztCurrentSlide = 0;
+  function moveZtSlide(step) {
+    ztCurrentSlide = (ztCurrentSlide + step + 3) % 3;
+    document.getElementById('zt-slides').style.transform = `translateX(-${ztCurrentSlide * 100}%)`;
+  }
+  setInterval(() => moveZtSlide(1), 5000);
+</script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
   
 </body>
 </html>
