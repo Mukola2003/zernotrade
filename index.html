@@ -1411,15 +1411,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
     grid.appendChild(card);
   });
-
-  if (searchInput) {
-    searchInput.addEventListener("input", () => {
-      const q = searchInput.value.toLowerCase().trim();
-      grid.querySelectorAll(".product-card").forEach(card => {
-        const text = (card.getAttribute("data-search") || card.textContent).toLowerCase();
-        card.style.display = !q || text.includes(q) ? "" : "none";
-   });
-    }    
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    const q = searchInput.value.toLowerCase().trim();
+    grid.querySelectorAll(".product-card").forEach(card => {
+      const text = (card.getAttribute("data-search") || card.textContent).toLowerCase();
+      card.style.display = !q || text.includes(q) ? "" : "none";
+    });
+  });
+}
+    });
+ 
 </script>
 
  
