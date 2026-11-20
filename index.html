@@ -1348,38 +1348,308 @@ document.addEventListener("DOMContentLoaded", async () => {
     return fallback;
   }
 
-  fetch("./feeds.json")
-  .then(res => res.ok ? res.json() : [])
-  .then(items => {
-    if (!Array.isArray(items) || !items.length || !grid) return;
-    items.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "product-card feed-item";
-      const category = typeof detectCategory === "function"
-        ? detectCategory(`${item.vendor || ""} ${item.name || ""}`, "drones")
-        : "drones";
-      card.setAttribute("data-category", category);
-      card.setAttribute("data-search", `${item.vendor || ""} ${item.name || ""}`.toLowerCase());
-      const safeName = String(item.name || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
-      const imgHtml = item.picture
-        ? `<img src="${item.picture}" alt="${safeName}" loading="lazy" style="width:100%;height:170px;object-fit:contain;margin-bottom:10px;">`
-        : "";
-      card.innerHTML = `
-        ${imgHtml}
-        <div style="font-size:12px;opacity:0.7;">${item.vendor || "Каталог партнерів"}</div>
-        <h4 style="margin:6px 0 8px;">${item.name}</h4>
-        <div style="font-weight:700;margin-bottom:6px;">${item.priceText || "Ціна за запитом"}</div>
-        <div style="font-size:12px;margin-bottom:10px;color:${item.available !== false ? "#15803d" : "#b91c1c"};">
-          ${item.available !== false ? "В наявності" : "Під замовлення"}
+ (function initStoreCatalog() {
+  const hostEl = document.getElementById("catalog-grid") || document.getElementById("equipment");
+  if (!hostEl) return;
+
+  const wrapper = document.createElement("div");
+  wrapper.id = "zt-store-catalog";
+  wrapper.innerHTML = `
+    <style>
+      #zt-store-catalog {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 24px;
+        align-items: start;
+        margin-top: 20px;
+        font-family: inherit;
+      }
+      @media (max-width: 860px) {
+        #zt-store-catalog { grid-template-columns: 1fr; }
+      }
+      .zt-sidebar {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .zt-filter-block {
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 14px;
+        margin-bottom: 14px;
+      }
+      .zt-filter-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+      .zt-filter-title { font-weight: 700; font-size: 14px; margin-bottom: 10px; color: #111827; }
+      .zt-cat-btn {
+        display: block; width: 100%; text-align: left;
+        background: none; border: none; padding: 6px 8px; border-radius: 6px;
+        cursor: pointer; font-size: 13px; color: #374151;
+      }
+      .zt-cat-btn.active, .zt-cat-btn:hover { background: #f3f4f6; font-weight: 600; color: #111827; }
+      .zt-price-row { display: flex; gap: 8px; align-items: center; }
+      .zt-price-row input {
+        width: 100%; padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px;
+      }
+      .zt-check { display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 6px 0; cursor: pointer; color: #374151; }
+      .zt-toolbar {
+        display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center;
+        background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px;
+      }
+      .zt-sort-btns { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; }
+      .zt-sort-btn {
+        padding: 6px 10px; border: 1px solid #d1d5db; background: #fff; border-radius: 6px;
+        cursor: pointer; font-size: 12px; color: #374151;
+      }
+      .zt-sort-btn.active { background: #111827; color: #fff; border-color: #111827; }
+      .zt-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;
+      }
+      .zt-card {
+        background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px;
+        display: flex; flex-direction: column; justify-content: space-between;
+      }
+      .zt-card img { width: 100%; height: 160px; object-fit: contain; margin-bottom: 10px; background: #fafafa; border-radius: 6px; }
+      .zt-vendor { font-size: 11px; text-transform: uppercase; color: #6b7280; margin-bottom: 4px; }
+      .zt-name { font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 8px; line-height: 1.35; }
+      .zt-price { font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+      .zt-stock { font-size: 12px; margin-bottom: 10px; }
+      .zt-reset {
+        margin-top: 10px; width: 100%; padding: 7px; border: 1px solid #d1d5db;
+        background: #f9fafb; border-radius: 6px; cursor: pointer; font-size: 12px;
+      }
+    </style>
+
+    <aside class="zt-sidebar">
+      <div class="zt-filter-block">
+        <div class="zt-filter-title">Категорії</div>
+        <div id="zt-categories"></div>
+      </div>
+
+      <div class="zt-filter-block">
+        <div class="zt-filter-title">Ціна, грн</div>
+        <div class="zt-price-row">
+          <input type="number" id="zt-min-price" placeholder="від" min="0">
+          <span>—</span>
+          <input type="number" id="zt-max-price" placeholder="до" min="0">
         </div>
-        <button type="button" class="btn-outline" style="width:100%;" onclick="if(typeof openModal==='function'){openModal('Обладнання: ${safeName}');}">
-          Замовити
-        </button>
-      `;
-      grid.appendChild(card);
+      </div>
+
+      <div class="zt-filter-block">
+        <div class="zt-filter-title">Наявність</div>
+        <label class="zt-check"><input type="checkbox" id="zt-only-stock"> В наявності</label>
+      </div>
+
+      <div class="zt-filter-block">
+        <div class="zt-filter-title">Бренд</div>
+        <div id="zt-vendors" style="max-height: 200px; overflow-y: auto;"></div>
+      </div>
+
+      <button type="button" class="zt-reset" id="zt-reset-btn">Скинути фільтри</button>
+    </aside>
+
+    <div>
+      <div class="zt-toolbar">
+        <div class="zt-sort-btns">
+          <span>Сортування:</span>
+          <button type="button" class="zt-sort-btn active" data-sort="default">За замовчуванням</button>
+          <button type="button" class="zt-sort-btn" data-sort="price-asc">Спочатку дешевше</button>
+          <button type="button" class="zt-sort-btn" data-sort="price-desc">Спочатку дорожче</button>
+          <button type="button" class="zt-sort-btn" data-sort="name-asc">За назвою</button>
+        </div>
+        <div id="zt-count" style="font-size: 13px; color: #6b7280;"></div>
+      </div>
+
+      <div class="zt-grid" id="zt-products-grid"></div>
+    </div>
+  `;
+
+  if (hostEl.id === "catalog-grid") {
+    hostEl.innerHTML = "";
+    hostEl.appendChild(wrapper);
+  } else {
+    hostEl.appendChild(wrapper);
+  }
+
+  let products = [];
+  let state = {
+    category: "all",
+    minPrice: null,
+    maxPrice: null,
+    onlyStock: false,
+    vendors: new Set(),
+    sort: "default",
+    query: ""
+  };
+
+  function parseNumericPrice(item) {
+    if (typeof item.price === "number" && !Number.isNaN(item.price)) return item.price;
+    const raw = String(item.priceText || "").replace(/[^\d.,]/g, "").replace(",", ".");
+    const num = parseFloat(raw);
+    return Number.isNaN(num) ? null : num;
+  }
+
+  function guessCategory(item) {
+    if (item.category) return item.category;
+    const txt = `${item.vendor || ""} ${item.name || ""}`.toLowerCase();
+    if (typeof detectCategory === "function") return detectCategory(txt, "drones");
+    if (txt.includes("ecoflow") || txt.includes("станц") || txt.includes("інвертор") || txt.includes("акб")) return "solar";
+    if (txt.includes("дрон") || txt.includes("uav") || txt.includes("квадрокоптер")) return "drones";
+    return "robotics";
+  }
+
+  const categoryLabels = {
+    all: "Усі товари",
+    solar: "Енергорішення",
+    drones: "Дрони та квадрокоптери",
+    robotics: "Робототехніка",
+    "grain-storage": "Зернозберігання",
+    ev: "Зарядні станції EV"
+  };
+
+  function buildFilters() {
+    const cats = ["all", ...new Set(products.map(p => p._cat))];
+    const catBox = wrapper.querySelector("#zt-categories");
+    catBox.innerHTML = cats.map(c => `
+      <button type="button" class="zt-cat-btn ${state.category === c ? "active" : ""}" data-cat="${c}">
+        ${categoryLabels[c] || c}
+      </button>
+    `).join("");
+
+    catBox.querySelectorAll(".zt-cat-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.category = btn.getAttribute("data-cat");
+        buildFilters();
+        render();
+      });
     });
-  })
-  .catch(err => console.error("Feeds load error:", err));
+
+    const vendors = [...new Set(products.map(p => (p.vendor || "").trim()).filter(Boolean))].sort();
+    const vendorBox = wrapper.querySelector("#zt-vendors");
+    vendorBox.innerHTML = vendors.length
+      ? vendors.map(v => {
+          const safeV = v.replace(/"/g, "&quot;");
+          const checked = state.vendors.has(v) ? "checked" : "";
+          return `<label class="zt-check"><input type="checkbox" class="zt-vendor-cb" value="${safeV}" ${checked}> ${v}</label>`;
+        }).join("")
+      : `<div style="font-size:12px;color:#9ca3af;">Бренди не вказані</div>`;
+
+    vendorBox.querySelectorAll(".zt-vendor-cb").forEach(cb => {
+      cb.addEventListener("change", () => {
+        if (cb.checked) state.vendors.add(cb.value);
+        else state.vendors.delete(cb.value);
+        render();
+      });
+    });
+  }
+
+  function render() {
+    let list = products.filter(p => {
+      if (state.category !== "all" && p._cat !== state.category) return false;
+      if (state.onlyStock && p.available === false) return false;
+      if (state.vendors.size > 0 && !state.vendors.has((p.vendor || "").trim())) return false;
+      if (state.minPrice !== null && (p._priceNum === null || p._priceNum < state.minPrice)) return false;
+      if (state.maxPrice !== null && (p._priceNum === null || p._priceNum > state.maxPrice)) return false;
+      if (state.query) {
+        const hay = `${p.vendor || ""} ${p.name || ""}`.toLowerCase();
+        if (!hay.includes(state.query)) return false;
+      }
+      return true;
+    });
+
+    if (state.sort === "price-asc") {
+      list.sort((a, b) => (a._priceNum ?? Infinity) - (b._priceNum ?? Infinity));
+    } else if (state.sort === "price-desc") {
+      list.sort((a, b) => (b._priceNum ?? -1) - (a._priceNum ?? -1));
+    } else if (state.sort === "name-asc") {
+      list.sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "uk"));
+    }
+
+    wrapper.querySelector("#zt-count").textContent = `Знайдено: ${list.length}`;
+    const grid = wrapper.querySelector("#zt-products-grid");
+
+    if (!list.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;padding:24px;text-align:center;color:#6b7280;">За обраними фільтрами товарів не знайдено.</div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(item => {
+      const safeName = String(item.name || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const inStock = item.available !== false;
+      const img = item.picture
+        ? `<img src="${item.picture}" alt="${safeName}" loading="lazy">`
+        : `<div style="height:160px;display:flex;align-items:center;justify-content:center;background:#f3f4f6;border-radius:6px;margin-bottom:10px;font-size:12px;color:#9ca3af;">Без фото</div>`;
+      return `
+        <div class="zt-card">
+          <div>
+            ${img}
+            <div class="zt-vendor">${item.vendor || "Каталог партнерів"}</div>
+            <h4 class="zt-name">${item.name}</h4>
+          </div>
+          <div>
+            <div class="zt-price">${item.priceText || "Ціна за запитом"}</div>
+            <div class="zt-stock" style="color:${inStock ? "#15803d" : "#b91c1c"};">
+              ${inStock ? "В наявності" : "Під замовлення"}
+            </div>
+            <button type="button" class="btn-outline" style="width:100%;" onclick="if(typeof openModal==='function'){openModal('Обладнання: ${safeName}');}">
+              Замовити
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  wrapper.querySelector("#zt-min-price").addEventListener("input", e => {
+    state.minPrice = e.target.value ? Number(e.target.value) : null;
+    render();
+  });
+  wrapper.querySelector("#zt-max-price").addEventListener("input", e => {
+    state.maxPrice = e.target.value ? Number(e.target.value) : null;
+    render();
+  });
+  wrapper.querySelector("#zt-only-stock").addEventListener("change", e => {
+    state.onlyStock = e.target.checked;
+    render();
+  });
+  wrapper.querySelector("#zt-reset-btn").addEventListener("click", () => {
+    state = { category: "all", minPrice: null, maxPrice: null, onlyStock: false, vendors: new Set(), sort: "default", query: state.query };
+    wrapper.querySelector("#zt-min-price").value = "";
+    wrapper.querySelector("#zt-max-price").value = "";
+    wrapper.querySelector("#zt-only-stock").checked = false;
+    wrapper.querySelectorAll(".zt-sort-btn").forEach(b => b.classList.toggle("active", b.dataset.sort === "default"));
+    buildFilters();
+    render();
+  });
+
+  wrapper.querySelectorAll(".zt-sort-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.sort = btn.dataset.sort;
+      wrapper.querySelectorAll(".zt-sort-btn").forEach(b => b.classList.toggle("active", b === btn));
+      render();
+    });
+  });
+
+  if (typeof searchInput !== "undefined" && searchInput) {
+    searchInput.addEventListener("input", () => {
+      state.query = searchInput.value.trim().toLowerCase();
+      render();
+    });
+  }
+
+  fetch("./feeds.json")
+    .then(res => (res.ok ? res.json() : []))
+    .then(items => {
+      if (!Array.isArray(items)) return;
+      products = items.map(item => ({
+        ...item,
+        _cat: guessCategory(item),
+        _priceNum: parseNumericPrice(item)
+      }));
+      buildFilters();
+      render();
+    })
+    .catch(err => console.error("Catalog load error:", err));
+})();
 if (searchInput) {
   searchInput.addEventListener("input", () => {
     const q = searchInput.value.toLowerCase().trim();
