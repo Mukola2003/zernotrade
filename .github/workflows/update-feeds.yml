@@ -1,0 +1,79 @@
+name: Update XML feeds
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch and parse XML feeds
+        run: |
+          node -e '
+          const feeds = [
+            "https://gw.drone.ua/app/feeds/v1/robotics.xml",
+            "https://b2b.robotics-distribution.com/content/export/5c6d6e138119f596e19512928a186a9a.xml"
+          ];
+
+          function extractTag(block, names) {
+            for (const name of names) {
+              const re = new RegExp(`<${name}[^>]*>([\\s\\S]*?)<\\/${name}>`, "i");
+              const m = block.match(re);
+              if (m) return m[1].replace(/<!\\[CDATA\\[|\\]\\]>/g, "").trim();
+            }
+            return "";
+          }
+
+          (async () => {
+            const items = [];
+            for (const url of feeds) {
+              try {
+                const res = await fetch(url);
+                if (!res.ok) continue;
+                const xml = await res.text();
+                const blocks = xml.match(/<(?:offer|item)\b[\s\S]*?<\/(?:offer|item)>/gi) || [];
+                for (const b of blocks) {
+                  const name = extractTag(b, ["name", "title", "model"]);
+                  if (!name) continue;
+                  const vendor = extractTag(b, ["vendor", "brand", "manufacturer"]);
+                  const price = extractTag(b, ["price"]);
+                  const currency = extractTag(b, ["currencyId", "currency"]) || "UAH";
+                  const picture = extractTag(b, ["picture", "image"]);
+                  items.push({
+                    name,
+                    vendor,
+                    priceText: price ? `${price} ${currency}` : "Ціна за запитом",
+                    picture,
+                    available: true
+                  });
+                }
+              } catch (e) {
+                console.error("Feed error:", url, e.message);
+              }
+            }
+            const fs = require("fs");
+            fs.writeFileSync("feeds.json", JSON.stringify(items.slice(0, 120), null, 2));
+            console.log("Saved items:", Math.min(items.length, 120));
+          })();
+          '
+
+      - name: Commit feeds.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add feeds.json
+          git diff --staged --quiet || git commit -m "Update feeds.json"
+          git push
